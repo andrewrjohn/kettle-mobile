@@ -10,8 +10,8 @@ This is going to be a cross-platform application (Web, iOS, Android) application
 - Side drawer menu with the ability to navigate to a different Kettle (by typing in the Kettle ID (kID) or create a new Kettle
 
 # Down the road
-Being able to share (email, text or copy) the link to the Kettle that you are in to make it easy for people to access.
-Image/video upload.
+- Being able to share (email, text or copy) the link to the Kettle that you are in to make it easy for people to access.
+- Image/video upload.
 
 # Why?
 Mainly to learn React Native and Firebase
