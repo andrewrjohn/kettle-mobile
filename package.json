@@ -9,7 +9,10 @@
   "dependencies": {
     "firebase": "^4.0.0",
     "react": "16.0.0-alpha.6",
-    "react-native": "0.44.0"
+    "react-native": "0.44.0",
+    "react-native-drawer": "^2.3.0",
+    "react-native-side-menu": "^0.20.1",
+    "react-native-simple-drawer": "^0.4.5"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",

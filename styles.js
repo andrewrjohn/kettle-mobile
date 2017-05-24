@@ -34,14 +34,27 @@ var styles = StyleSheet.create({
     borderBottomColor: '#eee',
     borderColor: 'transparent',
     borderWidth: 1,
-    justifyContent: 'center',
     height: 44,
-    flexDirection: 'row'
+    justifyContent: 'center',
+    flexDirection: 'row',
+    paddingLeft: 10
   },
   navbarTitle: {
     color: '#444',
     fontSize: 16,
-    fontWeight: "500"
+    fontWeight: "500",
+    justifyContent: 'center'
+  },
+  sidemenu: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 20,
+    shadowColor: 'black',
+    shadowOpacity: 1,
+  },
+  sidemenuText: {
+    height: 40,
+    paddingLeft: 14
   },
   statusbar: {
     backgroundColor: '#fff',
@@ -55,13 +68,21 @@ var styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
+  linkText: {
+    fontSize: 12,
+    textAlign: 'center',
+    backgroundColor:'transparent'
+  },
   action: {
+    justifyContent: 'flex-end',
     backgroundColor: constants.actionColor,
     borderColor: 'transparent',
     borderWidth: 1,
     paddingLeft: 16,
+    paddingRight: 16,
     paddingTop: 14,
     paddingBottom: 16,
+
   },
 })
 

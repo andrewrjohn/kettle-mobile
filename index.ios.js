@@ -6,12 +6,16 @@
 
 import React, {Component} from 'react';
 import ReactNative from 'react-native';
+
+
 const firebase = require('firebase');
 
 // External components
 const StatusBar = require('./components/StatusBar');
 const ActionButton = require('./components/ActionButton');
-const ListItem = require('./components/ListItem');
+
+import SideMenu from 'react-native-simple-drawer';
+
 const styles = require('./styles.js')
 
 const {
@@ -22,6 +26,8 @@ const {
   View,
   TouchableHighlight,
   AlertIOS,
+  TouchableOpacity,
+  TextInput
 } = ReactNative;
 
 // Initialize Firebase
@@ -34,6 +40,7 @@ const firebaseConfig = {
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
+
 class kettle extends Component {
 
   constructor(props) {
@@ -43,7 +50,7 @@ class kettle extends Component {
         rowHasChanged: (row1, row2) => row1 !== row2,
       })
     };
-    this.itemsRef = this.getRef().child('items');
+    this.itemsRef = this.getRef().child('kettles');
   }
 
   getRef() {
@@ -57,7 +64,7 @@ class kettle extends Component {
       var items = [];
       snap.forEach((child) => {
         items.push({
-          title: child.val().title,
+          title: child.val().content,
           _key: child.key
         });
       });
@@ -74,10 +81,30 @@ class kettle extends Component {
   }
 
   render() {
+
+
+    const menu = (
+            <View>
+            <TextInput
+      style={styles.sidemenuText}
+      placeholder="Search for Kettle" />
+
+    <ActionButton onPress={this._addItem.bind(this)} title="New Kettle" />
+            </View>
+
+
+        )
+
     return (
+      <SideMenu ref="menu" menu={menu} style={styles.sidemenu}>
       <View style={styles.container}>
 
-        <StatusBar title="Grocery List" />
+
+        <TouchableOpacity onPress={() => this.refs.menu.open()}>
+        <StatusBar title="arjohnson" onPress={() => this.refs.menu.open()}>
+        </StatusBar>
+        </TouchableOpacity>
+
 
         <ListView
           dataSource={this.state.dataSource}
@@ -85,22 +112,24 @@ class kettle extends Component {
           enableEmptySections={true}
           style={styles.listview}/>
 
-        <ActionButton onPress={this._addItem.bind(this)} title="Add" />
+
 
       </View>
+      <Text style={styles.linkText}>You can access your Kettle at: arjohnson.mykettle.co</Text>
+      </SideMenu>
     )
   }
 
   _addItem() {
     AlertIOS.prompt(
-      'Add New Item',
+      'Enter a unique name for your new Kettle',
       null,
       [
         {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
         {
-          text: 'Add',
+          text: 'Create',
           onPress: (text) => {
-            this.itemsRef.push({ title: text })
+            this.itemsRef.push({ content: text })
           }
         },
       ],
@@ -111,7 +140,8 @@ class kettle extends Component {
   _renderItem(item) {
 
     return (
-      <ListItem item={item}/>
+      null
+      //<ListItem item={item}/>
     );
   }
 
