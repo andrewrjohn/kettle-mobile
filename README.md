@@ -5,7 +5,7 @@ This is going to be a cross-platform application (Web, iOS, Android) application
 
 # Features
 - The idea is to be login-free and as fast as possible to use. Using Firebase, you can dump text into your unique Kettle and be able to access that anywhere just by searching the Kettle ID.
-- Realtime Syncing
+- Realtime Syncing, no refreshing or reloading.
 - "Star" feature to have the app default to your preferred Kettle
 - Side drawer menu with the ability to navigate to a different Kettle (by typing in the Kettle ID (kID) or create a new Kettle
 
