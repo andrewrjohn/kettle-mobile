@@ -1,2 +1,2 @@
-# kettle
+# Kettle
 Ract Native and Firebase app.
