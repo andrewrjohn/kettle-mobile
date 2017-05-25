@@ -49,8 +49,6 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 20,
-    shadowColor: 'black',
-    shadowOpacity: 1,
   },
   sidemenuText: {
     height: 40,

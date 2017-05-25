@@ -27,7 +27,8 @@ const {
   TouchableHighlight,
   AlertIOS,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  AsyncStorage
 } = ReactNative;
 
 // Initialize Firebase
@@ -39,30 +40,64 @@ const firebaseConfig = {
     storageBucket: "kettle-84ea2.appspot.com"
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
-
+async () => {
+const defaultKettle = await AsyncStorage.getItem('@MySuperStore:key');
+if (defaultKettle !== nul) {
+	this.setState({currentKettle: defaultKettle});
+} else {
+	this.setState({currentKettle: 'newKettle'});
+}
+}
 
 class kettle extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2,
-      })
+      currentKettle: ""
     };
-    this.itemsRef = this.getRef().child('kettles');
+
+    this.state = {
+      contentText: ""
+    };
+
+    this.state = {
+      kID: ""
+    }
+
+    this.state = {
+      kettleTitle: ""
+    }
   }
 
   getRef() {
     return firebaseApp.database().ref();
   }
 
-  listenForItems(itemsRef) {
+  changeKettle() {
 
   }
 
+  listeningForChanges(kettleId) {
+    if (kettleId == null) {
+      //this.state.kID = ""
+      this.state.kettleTitle = "WelcomeToKettle"
+      kettleId = "WelcomeToKettle"
+      this.state.currentKettle = kettleId
+    } else {
+      kettleId = this.state.currentKettle
+      this.state.kettleTitle = kettleId
+    }
+
+  var contentRef = firebase.database().ref('kettles/' + kettleId + '/content');
+  contentRef.on('value', (snapshot) => {
+  	this.setState({contentText:snapshot.val()});
+  });
+  }
+
   componentDidMount() {
-    this.listenForItems(this.itemsRef);
+    this.listeningForChanges(this.state.currentKettle);
   }
 
   render() {
@@ -72,7 +107,7 @@ class kettle extends Component {
             <View>
             <TextInput
       style={styles.sidemenuText}
-      placeholder="Search for Kettle" />
+      placeholder="Search for Kettle" autoCapitalize="none" returnKeyType={'search'} onSubmitEditing={(event) => this.updateKettle(event.nativeEvent.text)}/>
 
     <ActionButton onPress={this._addItem.bind(this)} title="New Kettle" />
             </View>
@@ -86,19 +121,22 @@ class kettle extends Component {
 
 
         <TouchableOpacity onPress={() => this.refs.menu.open()}>
-        <StatusBar title="arjohnson" onPress={() => this.refs.menu.open()}>
+        <StatusBar title={this.state.kettleTitle} onPress={() => this.refs.menu.open()}>
         </StatusBar>
         </TouchableOpacity>
 
-
-
-
+        <TextInput style={{padding: 10}} value={this.state.contentText} multiline={true} onChangeText={(text) => updateContent(text)}>
+        </TextInput>
       </View>
       <Text style={styles.linkText}>You can access your Kettle at: arjohnson.mykettle.co</Text>
       </SideMenu>
     )
   }
 
+updateKettle(searchedKettle) {
+  this.listeningForChanges(searchedKettle);
+  this.setState({currentKettle:searchedKettle});
+}
   _addItem() {
     AlertIOS.prompt(
       'Enter a unique name for your new Kettle',
@@ -110,7 +148,7 @@ class kettle extends Component {
           onPress: (text) => {
 
             firebase.database().ref('kettles/' + text + '/').set({
-	             content: 'Start here...'
+	             content: 'Welcome to your new Kettle!'
               });
           }
         },
