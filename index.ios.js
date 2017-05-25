@@ -58,22 +58,7 @@ class kettle extends Component {
   }
 
   listenForItems(itemsRef) {
-    itemsRef.on('value', (snap) => {
 
-      // get children as an array
-      var items = [];
-      snap.forEach((child) => {
-        items.push({
-          title: child.val().content,
-          _key: child.key
-        });
-      });
-
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(items)
-      });
-
-    });
   }
 
   componentDidMount() {
@@ -106,12 +91,6 @@ class kettle extends Component {
         </TouchableOpacity>
 
 
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={this._renderItem.bind(this)}
-          enableEmptySections={true}
-          style={styles.listview}/>
-
 
 
       </View>
@@ -129,7 +108,10 @@ class kettle extends Component {
         {
           text: 'Create',
           onPress: (text) => {
-            this.itemsRef.push({ content: text })
+
+            firebase.database().ref('kettles/' + text + '/').set({
+	             content: 'Start here...'
+              });
           }
         },
       ],
