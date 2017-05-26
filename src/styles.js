@@ -1,10 +1,10 @@
-const React = require('react-native')
-const {StyleSheet} = React
-const constants = {
-  actionColor: '#24CE84'
+import { StyleSheet } from 'react-native';
+
+export const constants = {
+  actionColor: '#24CE84',
 };
 
-var styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f2f2f2',
     flex: 1,
@@ -37,13 +37,13 @@ var styles = StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   navbarTitle: {
     color: '#444',
     fontSize: 16,
-    fontWeight: "500",
-    justifyContent: 'center'
+    fontWeight: '500',
+    justifyContent: 'center',
   },
   sidemenu: {
     flex: 1,
@@ -52,7 +52,7 @@ var styles = StyleSheet.create({
   },
   sidemenuText: {
     height: 40,
-    paddingLeft: 14
+    paddingLeft: 14,
   },
   statusbar: {
     backgroundColor: '#fff',
@@ -69,7 +69,7 @@ var styles = StyleSheet.create({
   linkText: {
     fontSize: 12,
     textAlign: 'center',
-    backgroundColor:'transparent'
+    backgroundColor: 'transparent',
   },
   action: {
     justifyContent: 'flex-end',
@@ -80,9 +80,5 @@ var styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 14,
     paddingBottom: 16,
-
   },
-})
-
-module.exports = styles
-module.exports.constants = constants;
+});
