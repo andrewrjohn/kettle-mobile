@@ -1,10 +1,10 @@
-const React = require('react-native')
-const {StyleSheet} = React
-const constants = {
+import { StyleSheet } from 'react-native';
+
+export const constants = {
   actionColor: '#24CE84'
 };
 
-var styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f2f2f2',
     flex: 1,
@@ -82,7 +82,4 @@ var styles = StyleSheet.create({
     paddingBottom: 16,
 
   },
-})
-
-module.exports = styles
-module.exports.constants = constants;
+});

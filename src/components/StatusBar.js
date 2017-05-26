@@ -1,8 +1,6 @@
-'use strict';
 import React, {Component} from 'react';
-import ReactNative from 'react-native';
-const styles = require('../styles.js')
-const { StyleSheet, Text, View} = ReactNative;
+import { StyleSheet, Text, View } from 'react-native';
+import { styles } from '../styles';
 
 class StatusBar extends Component {
   render() {
@@ -17,4 +15,4 @@ class StatusBar extends Component {
   }
 }
 
-module.exports = StatusBar;
+export default StatusBar;
