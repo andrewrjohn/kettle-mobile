@@ -17,26 +17,26 @@ import {
   AlertIOS,
   TouchableOpacity,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
 } from 'react-native';
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyD71FqS5lCiGdJuE8UrfS4Ic_TgHsgikV4",
-  authDomain: "kettle-84ea2.firebaseapp.com",
-  databaseURL: "https://kettle-84ea2.firebaseio.com",
-  projectId: "kettle-84ea2",
-  storageBucket: "kettle-84ea2.appspot.com"
+  apiKey: 'AIzaSyD71FqS5lCiGdJuE8UrfS4Ic_TgHsgikV4',
+  authDomain: 'kettle-84ea2.firebaseapp.com',
+  databaseURL: 'https://kettle-84ea2.firebaseio.com',
+  projectId: 'kettle-84ea2',
+  storageBucket: 'kettle-84ea2.appspot.com',
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 async () => {
   const defaultKettle = await AsyncStorage.getItem('@MySuperStore:key');
   if (defaultKettle !== nul) {
-    this.setState({currentKettle: defaultKettle});
+    this.setState({ currentKettle: defaultKettle });
   } else {
-    this.setState({currentKettle: 'newKettle'});
+    this.setState({ currentKettle: 'newKettle' });
   }
-}
+};
 
 class kettle extends Component {
   state = {
@@ -44,30 +44,30 @@ class kettle extends Component {
     contentText: '',
     kID: '',
     kettleTitle: 'WelcomeToKettle',
-  }
+  };
 
   getRef() {
     return firebaseApp.database().ref();
   }
 
-  changeKettle() {
-
-  }
+  changeKettle() {}
 
   listeningForChanges(kettleId) {
     if (kettleId == null) {
       //this.state.kID = ""
-      this.state.kettleTitle = "WelcomeToKettle"
-      kettleId = "WelcomeToKettle"
-      this.state.currentKettle = kettleId
+      this.state.kettleTitle = 'WelcomeToKettle';
+      kettleId = 'WelcomeToKettle';
+      this.state.currentKettle = kettleId;
     } else {
-      kettleId = this.state.currentKettle
-      this.state.kettleTitle = kettleId
+      kettleId = this.state.currentKettle;
+      this.state.kettleTitle = kettleId;
     }
 
-    var contentRef = firebase.database().ref('kettles/' + kettleId + '/content');
-    contentRef.on('value', (snapshot) => {
-      this.setState({contentText:snapshot.val()});
+    var contentRef = firebase
+      .database()
+      .ref('kettles/' + kettleId + '/content');
+    contentRef.on('value', snapshot => {
+      this.setState({ contentText: snapshot.val() });
     });
   }
 
@@ -80,7 +80,10 @@ class kettle extends Component {
       <View>
         <TextInput
           style={styles.sidemenuText}
-          placeholder="Search for Kettle" autoCapitalize="none" returnKeyType={'search'} onSubmitEditing={(event) => this.updateKettle(event.nativeEvent.text)}
+          placeholder="Search for Kettle"
+          autoCapitalize="none"
+          returnKeyType={'search'}
+          onSubmitEditing={event => this.updateKettle(event.nativeEvent.text)}
         />
 
         <ActionButton onPress={this._addItem.bind(this)} title="New Kettle" />
@@ -92,36 +95,47 @@ class kettle extends Component {
         <View style={styles.container}>
 
           <TouchableOpacity onPress={() => this.refs.menu.open()}>
-            <StatusBar title={this.state.kettleTitle} onPress={() => this.refs.menu.open()}>
-            </StatusBar>
+            <StatusBar
+              title={this.state.kettleTitle}
+              onPress={() => this.refs.menu.open()}
+            />
           </TouchableOpacity>
 
-          <TextInput style={{padding: 10}} value={this.state.contentText} multiline={true} onChangeText={(text) => updateContent(text)}>
-          </TextInput>
+          <TextInput
+            style={{ padding: 10 }}
+            value={this.state.contentText}
+            multiline={true}
+            onChangeText={text => updateContent(text)}
+          />
         </View>
-        <Text style={styles.linkText}>You can access your Kettle at: arjohnson.mykettle.co</Text>
+        <Text style={styles.linkText}>
+          You can access your Kettle at: arjohnson.mykettle.co
+        </Text>
       </SideMenu>
     );
   }
 
   updateKettle(searchedKettle) {
     this.listeningForChanges(searchedKettle);
-    this.setState({currentKettle:searchedKettle});
+    this.setState({ currentKettle: searchedKettle });
   }
   _addItem() {
     AlertIOS.prompt(
       'Enter a unique name for your new Kettle',
       null,
       [
-        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
         {
           text: 'Create',
-          onPress: (text) => {
-
+          onPress: text => {
             firebase.database().ref('kettles/' + text + '/').set({
-              content: 'Welcome to your new Kettle!'
+              content: 'Welcome to your new Kettle!',
             });
-          }
+          },
         },
       ],
       'plain-text'
@@ -129,13 +143,9 @@ class kettle extends Component {
   }
 
   _renderItem(item) {
-
-    return (
-      null
-      //<ListItem item={item}/>
-    );
+    return null;
+    //<ListItem item={item}/>
   }
-
 }
 
 export default kettle;
