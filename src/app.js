@@ -8,144 +8,193 @@ import SideMenu from 'react-native-simple-drawer';
 import { styles } from './styles';
 
 import {
-  AppRegistry,
-  ListView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-  AlertIOS,
-  TouchableOpacity,
-  TextInput,
-  AsyncStorage,
+	AppRegistry,
+	ListView,
+	StyleSheet,
+	Text,
+	View,
+	TouchableHighlight,
+	AlertIOS,
+	TouchableOpacity,
+	TextInput,
+	AsyncStorage,
+	Keyboard,
+	ActivityIndicator
 } from 'react-native';
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: 'AIzaSyD71FqS5lCiGdJuE8UrfS4Ic_TgHsgikV4',
-  authDomain: 'kettle-84ea2.firebaseapp.com',
-  databaseURL: 'https://kettle-84ea2.firebaseio.com',
-  projectId: 'kettle-84ea2',
-  storageBucket: 'kettle-84ea2.appspot.com',
+	apiKey: 'AIzaSyD71FqS5lCiGdJuE8UrfS4Ic_TgHsgikV4',
+	authDomain: 'kettle-84ea2.firebaseapp.com',
+	databaseURL: 'https://kettle-84ea2.firebaseio.com',
+	projectId: 'kettle-84ea2',
+	storageBucket: 'kettle-84ea2.appspot.com'
 };
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 async () => {
-  const defaultKettle = await AsyncStorage.getItem('@MySuperStore:key');
-  if (defaultKettle !== nul) {
-    this.setState({ currentKettle: defaultKettle });
-  } else {
-    this.setState({ currentKettle: 'newKettle' });
-  }
+	const defaultKettle = await AsyncStorage.getItem('@MySuperStore:key');
+	if (defaultKettle !== nul) {
+		this.setState({ currentKettle: defaultKettle });
+	} else {
+		this.setState({ currentKettle: 'newKettle' });
+	}
 };
 
 class kettle extends Component {
-  state = {
-    currentKettle: '',
-    contentText: '',
-    kID: '',
-    kettleTitle: 'WelcomeToKettle',
-  };
+	state = {
+		currentKettle: '',
+		contentText: '',
+		kID: '',
+		kettleTitle: 'WelcomeToKettle',
+		animating: true
+	};
 
-  getRef() {
-    return firebaseApp.database().ref();
-  }
+	getRef() {
+		return firebaseApp.database().ref();
+	}
 
-  changeKettle() {}
+	listeningForChanges(kettleId) {
+		if (kettleId == null) {
+			// this.state.currentKettle = 'WelcomeToKettle';
+			// kettleId = 'WelcomeToKettle';
+		} else {
+			this.state.currentKettle = kettleId;
+		}
 
-  listeningForChanges(kettleId) {
-    if (kettleId == null) {
-      //this.state.kID = ""
-      this.state.kettleTitle = 'WelcomeToKettle';
-      kettleId = 'WelcomeToKettle';
-      this.state.currentKettle = kettleId;
-    } else {
-      kettleId = this.state.currentKettle;
-      this.state.kettleTitle = kettleId;
-    }
+		var contentRef = firebase
+			.database()
+			.ref('kettles/' + kettleId + '/content');
 
-    var contentRef = firebase
-      .database()
-      .ref('kettles/' + kettleId + '/content');
-    contentRef.on('value', snapshot => {
-      this.setState({ contentText: snapshot.val() });
-    });
-  }
+		var checkRef = firebase.database().ref('kettles/');
+		// Checks if the searched Kettle exists
+		checkRef.on('value', snapshot => {
+			if (!snapshot.hasChild(kettleId)) {
+				AlertIOS.alert(
+					'Oops!',
+					"This Kettle doesn't exist yet, why don't you try creating it?"
+				);
+			} else {
+				Keyboard.dismiss();
+				this.refs.menu.close();
+				contentRef.on('value', snapshot => {
+					this.setState({ contentText: snapshot.val() });
+				});
+			}
+		});
+	}
 
-  componentDidMount() {
-    this.listeningForChanges(this.state.currentKettle);
-  }
+	componentDidMount() {
+		// var kID = '';
+		// if (this.state.currentKettle == null) {
+		// 	kID = 'WelcomeToKettle';
+		// } else {
+		// 	kID = this.state.currentKettle;
+		// }
+		// this.listeningForChanges(kID);
+	}
 
-  render() {
-    const menu = (
-      <View>
-        <TextInput
-          style={styles.sidemenuText}
-          placeholder="Search for Kettle"
-          autoCapitalize="none"
-          returnKeyType={'search'}
-          onSubmitEditing={event => this.updateKettle(event.nativeEvent.text)}
-        />
+	updateContent(newText) {
+		firebase.database().ref('kettles/' + this.state.currentKettle + '/').set({
+			content: newText
+		});
+	}
 
-        <ActionButton onPress={this._addItem.bind(this)} title="New Kettle" />
-      </View>
-    );
+	render() {
+		const menu = (
+			<View>
+				<TextInput
+					style={styles.sidemenuText}
+					placeholder="Search for Kettle"
+					autoCapitalize="none"
+					returnKeyType={'search'}
+					onChangeText={text => this.setState({ text })}
+					value={this.state.text}
+					onSubmitEditing={event => this.listeningForChanges(this.state.text)}
+					autoCorrect={false}
+					onBlur={event => Keyboard.dismiss()}
+					selectTextOnFocus={true}
+				/>
+				<Text style={styles.linkText}> Remember, capitalization matters </Text>
+				<ActionButton onPress={this._addItem.bind(this)} title="New Kettle" />
+			</View>
+		);
 
-    return (
-      <SideMenu ref="menu" menu={menu} style={styles.sidemenu}>
-        <View style={styles.container}>
+		return (
+			<SideMenu ref="menu" menu={menu} style={styles.sidemenu}>
 
-          <TouchableOpacity onPress={() => this.refs.menu.open()}>
-            <StatusBar
-              title={this.state.kettleTitle}
-              onPress={() => this.refs.menu.open()}
-            />
-          </TouchableOpacity>
+				<View style={styles.container}>
 
-          <TextInput
-            style={{ padding: 10 }}
-            value={this.state.contentText}
-            multiline={true}
-            onChangeText={text => updateContent(text)}
-          />
-        </View>
-        <Text style={styles.linkText}>
-          You can access your Kettle at: arjohnson.mykettle.co
-        </Text>
-      </SideMenu>
-    );
-  }
+					<TouchableOpacity onPress={() => this.refs.menu.open()}>
+						<StatusBar
+							title={this.state.currentKettle}
+							onPress={() => this.refs.menu.open()}
+						/>
+					</TouchableOpacity>
 
-  updateKettle(searchedKettle) {
-    this.listeningForChanges(searchedKettle);
-    this.setState({ currentKettle: searchedKettle });
-  }
-  _addItem() {
-    AlertIOS.prompt(
-      'Enter a unique name for your new Kettle',
-      null,
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {
-          text: 'Create',
-          onPress: text => {
-            firebase.database().ref('kettles/' + text + '/').set({
-              content: 'Welcome to your new Kettle!',
-            });
-          },
-        },
-      ],
-      'plain-text'
-    );
-  }
+					<TextInput
+						style={{ padding: 10 }}
+						multiline={true}
+						onChangeText={text => this.setState({ contentText: text })}
+						value={this.state.contentText}
+						onSubmitEditing={event =>
+							this.updateContent(this.state.contentText)}
+					/>
+				</View>
+				<TouchableOpacity style={{ alignItems: 'flex-end', paddingRight: 10 }}>
+					<Text>Placeholder</Text>
+				</TouchableOpacity>
+			</SideMenu>
+		);
+	}
 
-  _renderItem(item) {
-    return null;
-    //<ListItem item={item}/>
-  }
+	_addItem() {
+		AlertIOS.prompt(
+			'Enter a name for your new Kettle',
+			'Hint: if you want a less chance of people finding it, try naming it something super unique.',
+			[
+				{
+					text: 'Cancel',
+					onPress: () => console.log('Cancel Pressed'),
+					style: 'cancel'
+				},
+				{
+					text: 'Create',
+					onPress: text => {
+						var checkRef = firebase.database().ref('kettles/');
+
+						var contentRef = firebase
+							.database()
+							.ref('kettles/' + text + '/content');
+
+						checkRef.on('value', snapshot => {
+							if (snapshot.hasChild(text)) {
+								AlertIOS.alert(
+									'Oops!',
+									"This Kettle already exists, why don't you try searching for it?"
+								);
+							} else {
+								firebase.database().ref('kettles/' + text + '/').set({
+									content: "Remember, Kettle's are open to anyone, so be careful what you put in here"
+								});
+								Keyboard.dismiss();
+								this.refs.menu.close();
+								this.state.currentKettle = text;
+								contentRef.on('value', snapshot => {
+									this.setState({ contentText: snapshot.val() });
+								});
+							}
+						});
+					}
+				}
+			],
+			'plain-text'
+		);
+	}
+
+	_renderItem(item) {
+		return null;
+		//<ListItem item={item}/>
+	}
 }
 
 export default kettle;
