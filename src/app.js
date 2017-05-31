@@ -19,7 +19,8 @@ import {
   TextInput,
   AsyncStorage,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
+  KeyboardAvoidingView
 } from 'react-native';
 
 // Initialize Firebase
@@ -106,20 +107,17 @@ class kettle extends Component {
     return (
       <SideMenu ref="menu" menu={menu} style={styles.sidemenu}>
 
-        <View style={styles.container}>
-          <TouchableOpacity onPress={() => this.refs.menu.open()}>
-            <StatusBar title={this.state.currentKettle} />
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.refs.menu.open()}>
+          <StatusBar title={this.state.currentKettle} />
+        </TouchableOpacity>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
           <TextInput
             style={{ padding: 10, fontSize: 14 }}
             multiline={true}
             value={this.state.contentText}
             onChange={text => this.setState({ text })}
           />
-        </View>
-        <TouchableOpacity style={{ alignItems: 'flex-end', paddingRight: 10 }}>
-          <Text>Favorite placeholder</Text>
-        </TouchableOpacity>
+        </KeyboardAvoidingView>
       </SideMenu>
     );
   }
