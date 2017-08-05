@@ -7,6 +7,8 @@ import ActionButton from './components/ActionButton';
 import SideMenu from 'react-native-simple-drawer';
 import { styles } from './styles';
 
+import { Button, FormInput, Icon } from 'react-native-elements';
+
 import {
   AppRegistry,
   ListView,
@@ -87,7 +89,7 @@ class kettle extends Component {
   render() {
     const menu = (
       <View style={{}}>
-        <TextInput
+        <FormInput
           style={styles.sidemenuText}
           placeholder="Search for Kettle"
           autoCapitalize="none"
@@ -99,17 +101,22 @@ class kettle extends Component {
           onBlur={event => Keyboard.dismiss()}
           selectTextOnFocus={true}
         />
-        <Text style={styles.linkText}> Remember, capitalization matters </Text>
-        <ActionButton onPress={this._addItem.bind(this)} title="New Kettle" />
+        <Button
+          style={styles.sidemenuButton}
+          onPress={this._addItem.bind(this)}
+          icon={{ name: 'add' }}
+          title="NEW KETTLE"
+          backgroundColor="#66BB6A"
+        />
       </View>
     );
 
     return (
       <SideMenu ref="menu" menu={menu} style={styles.sidemenu}>
-
-        <TouchableOpacity onPress={() => this.refs.menu.open()}>
-          <StatusBar title={this.state.currentKettle} />
-        </TouchableOpacity>
+        <StatusBar
+          title={this.state.currentKettle}
+          menuBtnPressed={() => this.refs.menu.open()}
+        />
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <TextInput
             style={{ padding: 10, fontSize: 14 }}
@@ -149,7 +156,8 @@ class kettle extends Component {
                 );
               } else {
                 firebase.database().ref('kettles/' + text + '/').set({
-                  content: "Remember, Kettle's are open to anyone, so be careful what you put in here."
+                  content:
+                    "Remember, Kettle's are open to anyone, so be careful what you put in here."
                 });
                 Keyboard.dismiss();
                 this.refs.menu.close();

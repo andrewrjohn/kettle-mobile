@@ -29,24 +29,21 @@ export const styles = StyleSheet.create({
     fontSize: 16
   },
   navbar: {
-    alignItems: 'center',
+    display: 'flex',
     backgroundColor: '#fff',
     borderBottomColor: '#eee',
     borderColor: 'transparent',
     borderWidth: 1,
     height: 44,
-    justifyContent: 'center',
     flexDirection: 'row',
-    paddingLeft: 10
+    justifyContent: 'space-between',
+    padding: 10
   },
+
   navbarTitle: {
     color: '#444',
     fontSize: 16,
-    fontWeight: '500',
-    justifyContent: 'center'
-  },
-  navbarSave: {
-    justifyContent: 'flex-end'
+    fontWeight: '500'
   },
   sidemenu: {
     flex: 1,
@@ -54,12 +51,14 @@ export const styles = StyleSheet.create({
     paddingTop: 20
   },
   sidemenuText: {
-    height: 40,
-    paddingLeft: 14
+    height: 40
   },
   statusbar: {
     backgroundColor: '#fff',
     height: 22
+  },
+  sidemenuButton: {
+    margin: 10
   },
   center: {
     textAlign: 'center'
@@ -72,15 +71,5 @@ export const styles = StyleSheet.create({
   linkText: {
     fontSize: 12,
     textAlign: 'center'
-  },
-  action: {
-    justifyContent: 'flex-end',
-    backgroundColor: constants.actionColor,
-    borderColor: 'transparent',
-    borderWidth: 1,
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 14,
-    paddingBottom: 16
   }
 });
