@@ -37,8 +37,11 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 class kettle extends Component {
   state = {
-    contentText: '',
+    currentKettle: 'WelcomeToKettle',
+    contentText: 'WelcomeToKettle',
     kID: '',
+    newText: '',
+    //kettleTitle: 'WelcomeToKettle',
     animating: true
   };
 
@@ -75,22 +78,33 @@ class kettle extends Component {
     });
   }
 
+  componentDidMount() {
+    this.listeningForChanges(this.state.currentKettle);
+  }
 
-  updateContent(newText) {
-    this.setState({ contentText: newText });
-    firebase.database().ref('kettles/' + this.state.currentKettle + '/').set({
-      content: newText
-    });
+  updateContent(newT) {
+    if (newT == null) {
+    } else {
+      Keyboard.dismiss();
+      this.setState({ contentText: newT });
+      firebase
+        .database()
+        .ref('kettles/' + this.state.currentKettle + '/')
+        .child('content')
+        .set(this.state.contentText);
+    }
   }
 
   render() {
     const menu = (
       <View style={{}}>
+        <TextInput
           style={styles.sidemenuText}
           placeholder="Search for Kettle"
           autoCapitalize="none"
           returnKeyType={'search'}
           onChangeText={text => this.setState({ text })}
+          //value={this.state.currentKettle}
           onSubmitEditing={event => this.listeningForChanges(this.state.text)}
           autoCorrect={false}
           onBlur={event => Keyboard.dismiss()}
@@ -111,16 +125,22 @@ class kettle extends Component {
         <StatusBar
           title={this.state.currentKettle}
           menuBtnPressed={() => this.refs.menu.open()}
+          syncBtn={() => this.updateContent(this.state.newT)}
         />
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <TextInput
             style={{ padding: 10, fontSize: 14 }}
             multiline={true}
+            defaultValue={this.state.contentText}
+            onChangeText={newT => this.setState({ newT })}
+            value={this.state.newT}
           />
         </KeyboardAvoidingView>
       </SideMenu>
     );
   }
+
+  sync() {}
 
   _addItem() {
     AlertIOS.prompt(
@@ -134,27 +154,27 @@ class kettle extends Component {
         },
         {
           text: 'Create',
-          onPress: text => {
+          onPress: name => {
             var checkRef = firebase.database().ref('kettles/');
 
             var contentRef = firebase
               .database()
-              .ref('kettles/' + text + '/content');
+              .ref('kettles/' + name + '/content');
 
             checkRef.on('value', snapshot => {
-              if (snapshot.hasChild(text)) {
+              if (snapshot.hasChild(name)) {
                 AlertIOS.alert(
                   'Oops!',
                   "This Kettle already exists, why don't you try searching for it?"
                 );
               } else {
-                firebase.database().ref('kettles/' + text + '/').set({
+                firebase.database().ref('kettles/' + name + '/').set({
                   content:
                     "Remember, Kettle's are open to anyone, so be careful what you put in here."
                 });
                 Keyboard.dismiss();
                 this.refs.menu.close();
-                this.state.currentKettle = text;
+                this.state.currentKettle = name;
                 contentRef.on('value', snapshot => {
                   this.setState({ contentText: snapshot.val() });
                 });
