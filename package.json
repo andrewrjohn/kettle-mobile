@@ -15,7 +15,8 @@
     "react-native-elements": "^0.15.0",
     "react-native-side-menu": "^0.20.1",
     "react-native-simple-drawer": "^0.4.5",
-    "react-native-vector-icons": "^4.3.0"
+    "react-native-vector-icons": "^4.3.0",
+    "react-timer-mixin": "^0.13.3"
   },
   "devDependencies": {
     "babel-jest": "20.0.3",

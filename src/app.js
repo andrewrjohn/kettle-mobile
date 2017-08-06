@@ -37,10 +37,8 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 class kettle extends Component {
   state = {
-    currentKettle: '',
     contentText: '',
     kID: '',
-    kettleTitle: 'WelcomeToKettle',
     animating: true
   };
 
@@ -77,7 +75,6 @@ class kettle extends Component {
     });
   }
 
-  componentWillMount() {}
 
   updateContent(newText) {
     this.setState({ contentText: newText });
@@ -89,13 +86,11 @@ class kettle extends Component {
   render() {
     const menu = (
       <View style={{}}>
-        <FormInput
           style={styles.sidemenuText}
           placeholder="Search for Kettle"
           autoCapitalize="none"
           returnKeyType={'search'}
           onChangeText={text => this.setState({ text })}
-          value={this.state.text}
           onSubmitEditing={event => this.listeningForChanges(this.state.text)}
           autoCorrect={false}
           onBlur={event => Keyboard.dismiss()}
@@ -121,8 +116,6 @@ class kettle extends Component {
           <TextInput
             style={{ padding: 10, fontSize: 14 }}
             multiline={true}
-            value={this.state.contentText}
-            onChange={text => this.setState({ text })}
           />
         </KeyboardAvoidingView>
       </SideMenu>

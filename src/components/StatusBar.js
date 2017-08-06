@@ -18,7 +18,11 @@ class StatusBar extends Component {
           <Text style={styles.navbarTitle}>
             {this.props.title}
           </Text>
-          <Icon style={styles.favoriteButton} name="star" />
+          <Icon
+            style={styles.favoriteButton}
+            onPress={this.props.syncBtn}
+            name="cached"
+          />
         </View>
       </View>
     );

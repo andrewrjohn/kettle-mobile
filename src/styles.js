@@ -51,7 +51,8 @@ export const styles = StyleSheet.create({
     paddingTop: 20
   },
   sidemenuText: {
-    height: 40
+    height: 40,
+    paddingLeft: 10
   },
   statusbar: {
     backgroundColor: '#fff',
