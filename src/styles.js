@@ -6,7 +6,7 @@ export const constants = {
 
 export const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f2f2f2',
+    backgroundColor: 'white',
     flex: 1
   },
   listview: {
@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
   },
   sidemenu: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     paddingTop: 20
   },
   sidemenuText: {

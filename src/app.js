@@ -41,6 +41,7 @@ class kettle extends Component {
     contentText: 'WelcomeToKettle',
     kID: '',
     newText: '',
+    favoriteColor: 'orange',
 
     //kettleTitle: 'WelcomeToKettle',
     animating: true
@@ -96,6 +97,10 @@ class kettle extends Component {
     }
   }
 
+  favoritePressed() {
+    this.setState({ favoriteColor: 'yellow' });
+  }
+
   render() {
     const menu = (
       <View style={{}}>
@@ -129,7 +134,7 @@ class kettle extends Component {
         />
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <TextInput
-            style={{ padding: 10, fontSize: 14 }}
+            style={{ padding: 10, fontSize: 14, backgroundColor: 'white' }}
             multiline={true}
             defaultValue={this.state.contentText}
             onChangeText={newT => this.setState({ newT })}
@@ -137,11 +142,19 @@ class kettle extends Component {
             autoCorrect={false}
           />
         </KeyboardAvoidingView>
+        <Icon
+          style={{
+            justifyContent: 'flex-start',
+            alignItems: 'flex-end',
+            margin: 10
+          }}
+          onPress={this.props.favoritePressed}
+          name="star"
+          color={this.state.favoriteColor}
+        />
       </SideMenu>
     );
   }
-
-  sync() {}
 
   _addItem() {
     AlertIOS.prompt(
