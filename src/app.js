@@ -37,11 +37,12 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 class kettle extends Component {
   state = {
-    currentKettle: 'WelcomeToKettle',
-    contentText: 'WelcomeToKettle',
+    currentKettle: 'Welcome to Kettle!',
+    contentText:
+      "A Kettle is public collection of text, unique by the Kettle ID (kID).\n\nREMEMBER: Anybody who has the name of your Kettle can see your data, so make sure you don't put anything important in it.\n\nYou can search for previously-ceated Kettles, or create your own unique Kettle.\n\nStart by swiping from the left side of your screen. ",
     kID: '',
     newText: '',
-    favoriteColor: 'orange',
+    favoriteColor: 'black',
 
     //kettleTitle: 'WelcomeToKettle',
     animating: true
@@ -81,8 +82,30 @@ class kettle extends Component {
     });
   }
 
+  openingPrompt() {
+    AlertIOS.prompt(
+      'Search for a Kettle',
+      'Quickly jump to a new Kettle',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel'
+        },
+        {
+          text: 'Go',
+          onPress: name => {
+            this.listeningForChanges(name);
+          }
+        }
+      ],
+      'plain-text'
+    );
+  }
+
   componentDidMount() {
-    this.listeningForChanges(this.state.currentKettle);
+    //this.openingPrompt();
+    //this.listeningForChanges('WelcomeToKettle');
   }
   // Updates content
   updateContent(newT) {
@@ -98,7 +121,7 @@ class kettle extends Component {
   }
 
   favoritePressed() {
-    this.setState({ favoriteColor: 'yellow' });
+    this.state.favoriteColor = 'orange';
   }
 
   render() {
@@ -112,7 +135,7 @@ class kettle extends Component {
           onChangeText={text => this.setState({ text })}
           onSubmitEditing={event => this.listeningForChanges(this.state.text)}
           autoCorrect={false}
-          onBlur={event => Keyboard.dismiss()}
+          onBlur={() => Keyboard.dismiss()}
           selectTextOnFocus={true}
         />
         <Button
@@ -148,7 +171,7 @@ class kettle extends Component {
             alignItems: 'flex-end',
             margin: 10
           }}
-          onPress={this.props.favoritePressed}
+          //onPress={this.favoritePressed}
           name="star"
           color={this.state.favoriteColor}
         />
@@ -158,8 +181,8 @@ class kettle extends Component {
 
   _addItem() {
     AlertIOS.prompt(
-      'Enter a name for your new Kettle',
-      'Hint: if you want a less chance of people finding it, try naming it something super unique.',
+      'New Kettle Name',
+      "If you want to decrease the chance of people finding it, try naming it something unique like 'PurpleUnicorns4857602'.",
       [
         {
           text: 'Cancel',
@@ -171,29 +194,35 @@ class kettle extends Component {
           onPress: name => {
             var checkRef = firebase.database().ref('kettles/');
 
-            var contentRef = firebase
-              .database()
-              .ref('kettles/' + name + '/content');
-
-            checkRef.once('value', snapshot => {
-              if (snapshot.hasChild(name)) {
-                AlertIOS.alert(
-                  'Oops!',
-                  "This Kettle already exists, why don't you try searching for it?"
-                );
-              } else {
-                firebase.database().ref('kettles/' + name + '/').set({
-                  content:
-                    "Remember, Kettle's are open to anyone, so be careful what you put in here."
-                });
-                Keyboard.dismiss();
-                this.refs.menu.close();
-                this.state.currentKettle = name;
-                contentRef.on('value', snapshot => {
-                  this.setState({ contentText: snapshot.val() });
-                });
-              }
-            });
+            if (name.length > 20) {
+              AlertIOS.alert(
+                'Oops!',
+                "Try to keep your Kettle name under 21 characters.\n\nOur computers aren't THAT fast."
+              );
+            } else {
+              var contentRef = firebase
+                .database()
+                .ref('kettles/' + name + '/content');
+              checkRef.once('value', snapshot => {
+                if (snapshot.hasChild(name)) {
+                  AlertIOS.alert(
+                    'Oops!',
+                    "This Kettle already exists, why don't you try searching for it?"
+                  );
+                } else {
+                  firebase.database().ref('kettles/' + name + '/').set({
+                    content:
+                      "Remember, Kettle's are open to anyone, so be careful what you put in here."
+                  });
+                  Keyboard.dismiss();
+                  this.refs.menu.close();
+                  this.state.currentKettle = name;
+                  contentRef.on('value', snapshot => {
+                    this.setState({ contentText: snapshot.val() });
+                  });
+                }
+              });
+            }
           }
         }
       ],

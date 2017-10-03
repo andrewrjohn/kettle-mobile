@@ -21,7 +21,7 @@ class StatusBar extends Component {
           <Icon
             style={styles.favoriteButton}
             onPress={this.props.syncBtn}
-            name="cached"
+            name="check"
           />
         </View>
       </View>
