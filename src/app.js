@@ -39,7 +39,7 @@ class kettle extends Component {
   state = {
     currentKettle: 'Welcome to Kettle!',
     contentText:
-      "A Kettle is public collection of text, unique by the Kettle ID (kID).\n\nREMEMBER: Anybody who has the name of your Kettle can see your data, so make sure you don't put anything important in it.\n\nYou can search for previously-ceated Kettles, or create your own unique Kettle.\n\nStart by swiping from the left side of your screen. ",
+      "1. A Kettle is public collection of text, unique by the Kettle ID (kID).\n\n2. REMEMBER: Anybody who has the name of your Kettle can see your data, so make sure you don't put anything important in it.\n\n3. You can search for previously-ceated Kettles, or create your own unique Kettle.\n\n4. Save your changes by tapping the Checkmark.\n\n5. Start by swiping from the left side of your screen. ",
     kID: '',
     newText: '',
     favoriteColor: 'black',
