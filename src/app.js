@@ -41,6 +41,7 @@ class kettle extends Component {
     contentText: 'WelcomeToKettle',
     kID: '',
     newText: '',
+
     //kettleTitle: 'WelcomeToKettle',
     animating: true
   };
@@ -53,7 +54,8 @@ class kettle extends Component {
     if (kettleId == null) {
       this.state.currentKettle = 'WelcomeToKettle';
     } else {
-      this.state.currentKettle = kettleId;
+      //this.state.currentKettle = kettleId;
+      this.setState({ currentKettle: kettleId });
     }
 
     var contentRef = firebase
@@ -71,7 +73,7 @@ class kettle extends Component {
       } else {
         Keyboard.dismiss();
         this.refs.menu.close();
-        contentRef.on('value', snapshot => {
+        contentRef.once('value', snapshot => {
           this.setState({ contentText: snapshot.val() });
         });
       }
@@ -81,17 +83,16 @@ class kettle extends Component {
   componentDidMount() {
     this.listeningForChanges(this.state.currentKettle);
   }
-
+  // Updates content
   updateContent(newT) {
     if (newT == null) {
     } else {
       Keyboard.dismiss();
-      this.setState({ contentText: newT });
       firebase
         .database()
         .ref('kettles/' + this.state.currentKettle + '/')
         .child('content')
-        .set(this.state.contentText);
+        .set(this.state.newT);
     }
   }
 
@@ -104,7 +105,6 @@ class kettle extends Component {
           autoCapitalize="none"
           returnKeyType={'search'}
           onChangeText={text => this.setState({ text })}
-          //value={this.state.currentKettle}
           onSubmitEditing={event => this.listeningForChanges(this.state.text)}
           autoCorrect={false}
           onBlur={event => Keyboard.dismiss()}
@@ -114,7 +114,7 @@ class kettle extends Component {
           style={styles.sidemenuButton}
           onPress={this._addItem.bind(this)}
           icon={{ name: 'add' }}
-          title="NEW KETTLE"
+          title="New Kettle"
           backgroundColor="#66BB6A"
         />
       </View>
@@ -134,6 +134,7 @@ class kettle extends Component {
             defaultValue={this.state.contentText}
             onChangeText={newT => this.setState({ newT })}
             value={this.state.newT}
+            autoCorrect={false}
           />
         </KeyboardAvoidingView>
       </SideMenu>
@@ -161,7 +162,7 @@ class kettle extends Component {
               .database()
               .ref('kettles/' + name + '/content');
 
-            checkRef.on('value', snapshot => {
+            checkRef.once('value', snapshot => {
               if (snapshot.hasChild(name)) {
                 AlertIOS.alert(
                   'Oops!',
