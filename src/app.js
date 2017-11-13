@@ -79,8 +79,8 @@ class kettle extends Component {
       } else {
         Keyboard.dismiss();
         this.refs.menu.close();
-        contentRef.once('value', snapshot => {
-          this.setState({ contentText: snapshot.val() });
+        contentRef.on('value', snapshot => {
+          this.setState({ newT: snapshot.val() });
         });
       }
     });
@@ -107,6 +107,8 @@ class kettle extends Component {
       'plain-text'
     );
   }
+
+  _keyExtractor = (item, index) => item.id;
 
   componentDidMount() {
     //this.openingPrompt();
@@ -164,6 +166,7 @@ class kettle extends Component {
         <FlatList
           style={{ paddingLeft: 10 }}
           data={this.state.recents}
+          keyExtractor={this._keyExtractor}
           renderItem={({ item }) =>
             <TouchableHighlight
               onPress={() => this.listeningForChanges('Andrew')}
