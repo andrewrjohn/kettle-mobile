@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   listview: {
     flex: 1
   },
+
   li: {
     backgroundColor: '#fff',
     borderBottomColor: '#eee',
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
   },
   navbar: {
     display: 'flex',
-    backgroundColor: '#fff',
+    backgroundColor: '#008080',
     borderBottomColor: '#eee',
     borderColor: 'transparent',
     borderWidth: 1,
@@ -41,7 +42,7 @@ export const styles = StyleSheet.create({
   },
 
   navbarTitle: {
-    color: '#444',
+    color: 'white',
     fontSize: 16,
     fontWeight: '500'
   },
@@ -55,7 +56,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 10
   },
   statusbar: {
-    backgroundColor: '#fff',
+    backgroundColor: '#008080',
     height: 22
   },
   sidemenuButton: {

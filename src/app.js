@@ -22,7 +22,9 @@ import {
   AsyncStorage,
   Keyboard,
   ActivityIndicator,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  FlatList,
+  ListItem
 } from 'react-native';
 
 // Initialize Firebase
@@ -43,6 +45,8 @@ class kettle extends Component {
     kID: '',
     newText: '',
     favoriteColor: 'black',
+    recents: [],
+    searchedText: '',
 
     //kettleTitle: 'WelcomeToKettle',
     animating: true
@@ -80,6 +84,7 @@ class kettle extends Component {
         });
       }
     });
+    this.state.recents.push(this.state.searchedText);
   }
 
   openingPrompt() {
@@ -124,6 +129,14 @@ class kettle extends Component {
     this.state.favoriteColor = 'orange';
   }
 
+  _renderItem = ({ item }) =>
+    <MyListItem
+      id={item.id}
+      onPressItem={this._onPressItem}
+      selected={!!this.state.selected.get(item.id)}
+      title={item.title}
+    />;
+
   render() {
     const menu = (
       <View style={{}}>
@@ -132,8 +145,9 @@ class kettle extends Component {
           placeholder="Search for Kettle"
           autoCapitalize="none"
           returnKeyType={'search'}
-          onChangeText={text => this.setState({ text })}
-          onSubmitEditing={event => this.listeningForChanges(this.state.text)}
+          onChangeText={text => this.setState({ searchedText: text })}
+          onSubmitEditing={event =>
+            this.listeningForChanges(this.state.searchedText)}
           autoCorrect={false}
           onBlur={() => Keyboard.dismiss()}
           selectTextOnFocus={true}
@@ -144,6 +158,24 @@ class kettle extends Component {
           icon={{ name: 'add' }}
           title="New Kettle"
           backgroundColor="#66BB6A"
+        />
+        <Text style={{ textAlign: 'center' }}>Recent Searches</Text>
+
+        <FlatList
+          style={{ paddingLeft: 10 }}
+          data={this.state.recents}
+          renderItem={({ item }) =>
+            <TouchableHighlight
+              onPress={() => this.listeningForChanges('Andrew')}
+            >
+              <View
+                style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey' }}
+              >
+                <Text style={{ fontSize: 24 }}>
+                  {item}
+                </Text>
+              </View>
+            </TouchableHighlight>}
         />
       </View>
     );

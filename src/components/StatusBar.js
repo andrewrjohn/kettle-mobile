@@ -14,6 +14,7 @@ class StatusBar extends Component {
             style={styles.favoriteButton}
             onPress={this.props.menuBtnPressed}
             name="menu"
+            color="white"
           />
           <Text style={styles.navbarTitle}>
             {this.props.title}
@@ -22,6 +23,7 @@ class StatusBar extends Component {
             style={styles.favoriteButton}
             onPress={this.props.syncBtn}
             name="check"
+            color="white"
           />
         </View>
       </View>
