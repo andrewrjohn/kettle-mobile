@@ -20,7 +20,7 @@ class StatusBar extends Component {
             {this.props.title}
           </Text>
           <Icon
-            style={styles.favoriteButton}
+            //style={styles.favoriteButton}
             onPress={this.props.syncBtn}
             name="check"
             color="white"

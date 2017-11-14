@@ -9,6 +9,8 @@ import { styles } from './styles';
 
 import { Button, FormInput, Icon } from 'react-native-elements';
 
+import Toast, { DURATION } from 'react-native-easy-toast';
+
 import {
   AppRegistry,
   ListView,
@@ -110,10 +112,7 @@ class kettle extends Component {
 
   _keyExtractor = (item, index) => item.id;
 
-  componentDidMount() {
-    //this.openingPrompt();
-    //this.listeningForChanges('WelcomeToKettle');
-  }
+  componentDidMount() {}
   // Updates content
   updateContent(newT) {
     if (newT == null) {
@@ -124,6 +123,7 @@ class kettle extends Component {
         .ref('kettles/' + this.state.currentKettle + '/')
         .child('content')
         .set(this.state.newT);
+      this.refs.toast.show('Updated');
     }
   }
 
@@ -210,6 +210,7 @@ class kettle extends Component {
           name="star"
           color={this.state.favoriteColor}
         />
+        <Toast ref="toast" position="center" />
       </SideMenu>
     );
   }

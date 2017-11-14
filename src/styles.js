@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export const constants = {
-  actionColor: '#24CE84'
+  actionColor: '#008080'
 };
 
 export const styles = StyleSheet.create({
@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
   listview: {
     flex: 1
   },
-
   li: {
     backgroundColor: '#fff',
     borderBottomColor: '#eee',
@@ -31,7 +30,7 @@ export const styles = StyleSheet.create({
   },
   navbar: {
     display: 'flex',
-    backgroundColor: '#008080',
+    backgroundColor: '#FF3540',
     borderBottomColor: '#eee',
     borderColor: 'transparent',
     borderWidth: 1,
@@ -56,11 +55,12 @@ export const styles = StyleSheet.create({
     paddingLeft: 10
   },
   statusbar: {
-    backgroundColor: '#008080',
+    backgroundColor: '#FF3540',
     height: 22
   },
   sidemenuButton: {
-    margin: 10
+    marginTop: 10,
+    marginBottom: 10
   },
   center: {
     textAlign: 'center'
